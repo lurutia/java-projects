@@ -1,16 +1,18 @@
 package test;
 
 import dao.UserDao;
-import dao.module.ConnectionMaker;
-import dao.module.SimpleConnectionMaker;
+import dao.module.DaoFactory;
 import model.User;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
 
 public class UserDaoTest {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        ConnectionMaker connectionMaker = new SimpleConnectionMaker();
-        UserDao userDao = new UserDao(connectionMaker);
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+
+        UserDao userDao = context.getBean("userDao", UserDao.class);
 
         userDao.delete();
 
