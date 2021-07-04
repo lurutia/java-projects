@@ -7,6 +7,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         UserDao dao = new UserDao();
 
+        dao.delete();
+
         User user = new User();
         user.setId("2");
         user.setName("user02");
