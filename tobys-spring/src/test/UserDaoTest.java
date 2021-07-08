@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.sql.SQLException;
 
@@ -63,5 +64,16 @@ public class UserDaoTest {
 
         userDao.add(user3);
         assertThat(userDao.getCount(), is(3));
+    }
+
+    @Test(expected = EmptyResultDataAccessException.class)
+    public void getUserFail() throws SQLException, ClassNotFoundException {
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+
+        UserDao dao = context.getBean("userDao", UserDao.class);
+        dao.delete();
+        assertThat(dao.getCount(), is(0));
+
+        dao.get("unknown_id");
     }
 }
