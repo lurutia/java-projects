@@ -17,11 +17,13 @@ public class UserDao {
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
+        this.jdbcContext = new JdbcContext();
+        jdbcContext.setDataSource(dataSource);
     }
 
-    public void setJdbcContext(JdbcContext jdbcContext) {
-        this.jdbcContext = jdbcContext;
-    }
+//    public void setJdbcContext(JdbcContext jdbcContext) {
+//        this.jdbcContext = jdbcContext;
+//    }
 
     //    public void setConnectionMaker(ConnectionMaker dataSource) {
 //        this.dataSource = dataSource;
@@ -71,8 +73,9 @@ public class UserDao {
     }
 
     public boolean delete() throws SQLException {
-        StatementStrategy st = new DeleteAllStatement();
-        this.jdbcContext.workWithStatementStrategy(st);
+//        StatementStrategy st = new DeleteAllStatement();
+//        this.jdbcContext.workWithStatementStrategy(st);
+        this.jdbcContext.executeSql("delete from users");
         return true;
     }
 
@@ -91,4 +94,6 @@ public class UserDao {
 
         return count;
     }
+
+
 }
