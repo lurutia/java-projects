@@ -3,8 +3,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-    <bean id="realConnectionMaker" class="dao.tool.SimpleConnectionMaker" />
-    <bean id="connectionMaker" class="dao.tool.CountingConnectionMaker">
+    <bean id="realConnectionMaker" class="dao.module.SimpleConnectionMaker" />
+    <bean id="connectionMaker" class="dao.module.CountingConnectionMaker">
         <property name="connectionMaker" ref="realConnectionMaker" />
     </bean>
 
@@ -15,12 +15,12 @@
         <property name="password" value="12345" />
     </bean>
 
-    <bean id="jdbcContext" class="dao.JdbcContext">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
+<!--    <bean id="jdbcContext" class="dao.JdbcContext">-->
+<!--        <property name="dataSource" ref="dataSource" />-->
+<!--    </bean>-->
 
     <bean id="userDao" class="dao.UserDao">
         <property name="dataSource" ref="dataSource" />
-        <property name="jdbcContext" ref="jdbcContext" />
+<!--        <property name="jdbcContext" ref="jdbcContext" />-->
     </bean>
 </beans>
