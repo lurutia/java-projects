@@ -1,16 +1,17 @@
 package test;
 
+import model.Level;
 import model.User;
 import dao.UserDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import user.service.UserService;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -25,6 +26,7 @@ public class UserDaoTest {
 
     @Autowired
     UserDao userDao;
+
 
 //    private UserDao userDao;
     private User user1;
@@ -41,9 +43,9 @@ public class UserDaoTest {
 //        );
 //        userDao.setDataSource(dataSource);
 
-        this.user1 = new User("user01", "유저01", "12345");
-        this.user2 = new User("user02", "유저02", "12345");
-        this.user3 = new User("user03", "유저3", "12345");
+        this.user1 = new User("user01", "유저01", "12345", Level.BASIC, 1, 0);
+        this.user2 = new User("user02", "유저02", "12345", Level.SILVER, 55, 10);
+        this.user3 = new User("user03", "유저3", "12345", Level.GOLD, 100, 40);
     }
 
     @Test
@@ -57,12 +59,10 @@ public class UserDaoTest {
         assertThat(userDao.getCount(), is(2));
 
         User getUser1 = userDao.get(user1.getId());
-        assertThat(getUser1.getName(), is(user1.getName()));
-        assertThat(getUser1.getPassword(), is(user1.getPassword()));
+        checkSameUser(getUser1, user1);
 
         User getUser2 = userDao.get(user2.getId());
-        assertThat(user2.getName(), is(user2.getName()));
-        assertThat(user2.getPassword(), is(user2.getPassword()));
+        checkSameUser(getUser2, user2);
 
 //        CountingConnectionMaker ccm = context.getBean("connectionMaker", CountingConnectionMaker.class);
 //        System.out.println("Connection counter : " + ccm.getCounter());
@@ -101,20 +101,37 @@ public class UserDaoTest {
         userDao.add(user1); // id user01
         List<User> users1 = userDao.getAll();
         assertThat(users1.size(), is(1));
-        checkSomeUser(user1, users1.get(0));
+        checkSameUser(user1, users1.get(0));
 
         userDao.add(user2); // id user02
         List<User> users2 = userDao.getAll();
         assertThat(users2.size(), is(2));
-        checkSomeUser(user1, users1.get(0));
-        checkSomeUser(user2, users2.get(1));
+        checkSameUser(user1, users1.get(0));
+        checkSameUser(user2, users2.get(1));
 
         userDao.add(user3); // id user03
         List<User> users3 = userDao.getAll();
         assertThat(users3.size(), is(3));
-        checkSomeUser(user1, users1.get(0));
-        checkSomeUser(user2, users2.get(1));
-        checkSomeUser(user3, users3.get(2));
+        checkSameUser(user1, users1.get(0));
+        checkSameUser(user2, users2.get(1));
+        checkSameUser(user3, users3.get(2));
+    }
+
+    @Test
+    public void update() {
+        userDao.delete();
+
+        userDao.add(user1);
+
+        user1.setName("체인지");
+        user1.setPassword("spring6");
+        user1.setLevel(Level.GOLD);
+        user1.setLogin(1000);
+        user1.setRecommend(999);
+        userDao.update(user1);
+
+        User user1update = userDao.get(user1.getId());
+        checkSameUser(user1, user1update);
     }
 
     @Test(expected = DuplicateKeyException.class)
@@ -125,9 +142,13 @@ public class UserDaoTest {
         this.userDao.add(user1); // key user01
     }
 
-    private void checkSomeUser(User user1, User user2) {
+    private void checkSameUser(User user1, User user2) {
         assertThat(user1.getId(), is(user2.getId()));
         assertThat(user1.getName(), is(user2.getName()));
         assertThat(user1.getPassword(), is(user2.getPassword()));
+        assertThat(user1.getLevel(), is(user2.getLevel()));
+        assertThat(user1.getLogin(), is(user2.getLogin()));
+        assertThat(user1.getRecommend(), is(user2.getRecommend()));
+
     }
 }

@@ -1,6 +1,7 @@
 package dao;
 
 import infra.exception.DuplicateUserIdException;
+import model.Level;
 import model.User;
 import org.junit.Test;
 import org.springframework.dao.DataAccessException;
@@ -27,6 +28,9 @@ public class UserDaoJdbc implements UserDao {
             user.setId(rs.getString("id"));
             user.setName(rs.getString("name"));
             user.setPassword(rs.getString("password"));
+            user.setLevel(Level.valueOf(rs.getInt("level")));
+            user.setLogin(rs.getInt("login"));
+            user.setRecommend(rs.getInt("recommend"));
             return user;
         }
     };
@@ -71,7 +75,14 @@ public class UserDaoJdbc implements UserDao {
 //                throw new RuntimeException(e);
 //            }
 //        }
-        this.jdbcTemplate.update("insert into users(id, name, password) values(?, ?, ?)", user.getId(), user.getName(), user.getPassword());
+        this.jdbcTemplate.update("insert into users(id, name, password, level, login, recommend) values(?, ?, ?, ?, ?, ?)",
+                user.getId(),
+                user.getName(),
+                user.getPassword(),
+                user.getLevel().intValue(),
+                user.getLogin(),
+                user.getRecommend()
+        );
     }
 
     public User get(String id) {
@@ -105,5 +116,16 @@ public class UserDaoJdbc implements UserDao {
 //        rs.close();
 //        ps.close();
 //        c.close();
+    }
+
+    public void update(User user) {
+        this.jdbcTemplate.update("update users set name = ?, password = ?, level = ?, login = ?, recommend = ? " +
+                "where id = ?",
+                user.getName(),
+                user.getPassword(),
+                user.getLevel().intValue(),
+                user.getLogin(),
+                user.getRecommend(),
+                user.getId());
     }
 }
