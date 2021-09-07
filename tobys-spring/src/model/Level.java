@@ -1,16 +1,22 @@
 package model;
 
 public enum Level {
-    BASIC(1), SILVER(2), GOLD(3);
+    GOLD(3, null), SILVER(2, GOLD), BASIC(1, SILVER) ;
 
     private final int value;
+    private final Level next;
 
-    Level(int value) {
+    Level(int value, Level next) {
         this.value = value;
+        this.next = next;
     }
 
     public int intValue() {
         return value;
+    }
+
+    public Level nextLevel() {
+        return this.next;
     }
 
     public static Level valueOf(int value) {
@@ -20,5 +26,13 @@ public enum Level {
             case 3: return GOLD;
             default: throw new AssertionError("Unknown value: " + value);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Level{" +
+                "value=" + value +
+                ", next=" + next +
+                '}';
     }
 }
