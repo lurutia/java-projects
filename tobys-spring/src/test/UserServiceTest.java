@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import user.service.UserService;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +27,9 @@ import static user.service.UserService.MIN_RECCOMEND_FOR_GOLD;
 public class UserServiceTest {
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    DataSource dataSource;
 
     @Autowired
     UserService userService;
@@ -102,6 +106,7 @@ public class UserServiceTest {
     public void upgradeAllOrNothing() {
         UserService testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(this.userDao);
+        testUserService.setDataSource(this.dataSource);
         userDao.delete();
         for (User user : users) userDao.add(user);
 

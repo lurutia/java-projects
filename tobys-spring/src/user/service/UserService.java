@@ -38,6 +38,8 @@ public class UserService {
                     upgradeLevel(user);
                 }
             }
+
+            c.commit();
         } catch (Exception e) {
             c.rollback();
             throw e;
