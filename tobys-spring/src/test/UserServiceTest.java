@@ -11,11 +11,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import user.service.UserService;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static user.service.UserService.MIN_LOGOUT_FOR_SILVER;
 import static user.service.UserService.MIN_RECCOMEND_FOR_GOLD;
 
@@ -42,7 +44,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void upgradeLevels() {
+    public void upgradeLevels() throws SQLException {
         userDao.delete();
         for(User user : users) {
             userDao.add(user);
@@ -94,5 +96,38 @@ public class UserServiceTest {
         else {
             assertThat(userUpdate.getLevel(), is(user.getLevel()));
         }
+    }
+
+    @Test
+    public void upgradeAllOrNothing() {
+        UserService testUserService = new TestUserService(users.get(3).getId());
+        testUserService.setUserDao(this.userDao);
+        userDao.delete();
+        for (User user : users) userDao.add(user);
+
+        try {
+            testUserService.upgradeLevel();
+            fail("TestUserServiceException expected");
+        }
+        catch (TestUserServiceException | SQLException e) {
+        }
+
+        checkLevelUpgraded(users.get(1), false);
+    }
+
+    static class TestUserService extends UserService {
+        private String id;
+
+        private TestUserService(String id) {
+            this.id = id;
+        }
+
+        protected void upgradeLevel(User user) {
+            if (user.getId().equals(this.id)) throw new TestUserServiceException();
+            super.upgradeLevel(user);
+        }
+    }
+
+    static class TestUserServiceException extends RuntimeException {
     }
 }
