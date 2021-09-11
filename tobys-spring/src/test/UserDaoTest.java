@@ -43,9 +43,9 @@ public class UserDaoTest {
 //        );
 //        userDao.setDataSource(dataSource);
 
-        this.user1 = new User("user01", "유저01", "12345", Level.BASIC, 1, 0);
-        this.user2 = new User("user02", "유저02", "12345", Level.SILVER, 55, 10);
-        this.user3 = new User("user03", "유저3", "12345", Level.GOLD, 100, 40);
+        this.user1 = new User("user01", "유저01", "12345", Level.BASIC, 1, 0, "user01@email.com");
+        this.user2 = new User("user02", "유저02", "12345", Level.SILVER, 55, 10, "user02@email.com");
+        this.user3 = new User("user03", "유저3", "12345", Level.GOLD, 100, 40, "user03@email.com");
     }
 
     @Test
