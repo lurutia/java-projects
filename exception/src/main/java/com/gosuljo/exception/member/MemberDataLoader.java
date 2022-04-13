@@ -25,7 +25,7 @@ public class MemberDataLoader implements ApplicationRunner {
 		Member savedMember = memberRepository.save(member);
 		Member findMember = memberRepository.findById(savedMember.id).get();
 		
-		throw new SQLException("SQLException은 checkedException으로 롤백되지 않습니다.");			
+//		throw new SQLException("SQLException은 checkedException으로 롤백되지 않습니다.");
 //		throw new IndexOutOfBoundsException("IndexOutOfBoundsException은 uncheckedException으로 롤백됩니다.");
 //		throw new DataIntegrityViolationException("DataIntegrityViolation은 uncheckedException으로 롤백됩니다.");
 
