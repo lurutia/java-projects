@@ -1,0 +1,33 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.7'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+    id 'com.google.cloud.tools.jib' version '3.1.2'
+}
+
+group = 'com.gosuljo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+jib {
+    to {
+        image = "lurutia/hello-jib"
+        tags = ["latest"]
+    }
+    container {
+        jvmFlags = ["-Xms128m", "-Xmx128m"]
+    }
+}
