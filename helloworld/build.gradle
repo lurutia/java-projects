@@ -24,7 +24,7 @@ tasks.named('test') {
 
 jib {
     to {
-        image = "10.102.188.232:5000/gosuljo/hello-jib"
+        image = "http://10.102.188.232:5000/hello-jib"
         tags = ["latest"]
     }
     container {
