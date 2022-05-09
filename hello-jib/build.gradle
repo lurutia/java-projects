@@ -30,6 +30,7 @@ jib {
 			username = 'admin'
 			password = 'qwer4321'
 		}
+		allowInsecureRegistries = true
 	}
 	container {
 		jvmFlags = ["-Xms128m", "-Xmx128m"]
