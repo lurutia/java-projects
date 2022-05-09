@@ -26,6 +26,10 @@ jib {
 	to {
 		image = "nexus-cluster.nexus3.svc.cluster.local:5000/hello-jib"
 		tags = ["latest"]
+		auth {
+			username = 'admin'
+			password = 'qwer4321'
+		}
 	}
 	container {
 		jvmFlags = ["-Xms128m", "-Xmx128m"]
