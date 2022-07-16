@@ -1,0 +1,45 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.1'
+	id 'java'
+}
+
+bootJar.enabled = false
+
+subprojects {
+	group = 'com.gosuljo'
+	version = '0.0.1-SNAPSHOT'
+
+	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	repositories {
+		mavenCentral()
+	}
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+
+	test {
+		useJUnitPlatform()
+	}
+}
+
+project(':module-api') {
+	sourceCompatibility = '17'
+}
+
+project(':module-common') {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
